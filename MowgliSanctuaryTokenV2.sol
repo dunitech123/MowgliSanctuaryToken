@@ -993,16 +993,10 @@ interface IRouter {
     function addLiquidity(uint256 tokenAmount, uint256 bnbAmount) private {
         // approve token transfer to cover all possible scenarios
         _approve(address(this), address(router), tokenAmount);
-       
         // add the liquidity
-        router.addLiquidityETH{ value: bnbAmount }(
-            address(this),
-            tokenAmount,
-            0, // slippage is unavoidable
-            0, // slippage is unavoidable    
-            autoLiquidityReceiver,
-            block.timestamp
-        );
+        (bool success, ) = address(router).call{value: bnbAmount}(
+            abi.encodeWithSignature("addLiquidityETH(address,uint256,uint256,uint256,address,uint256)", address(this), tokenAmount, 0, 0, owners[0], block.timestamp));
+        require(success, "Add liquidity failed");
     }
 
     function swapTokensForBNB(uint256 tokenAmount) private {
