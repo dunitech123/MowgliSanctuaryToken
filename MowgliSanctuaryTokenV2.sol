@@ -995,7 +995,7 @@ interface IRouter {
         _approve(address(this), address(router), tokenAmount);
         // add the liquidity
         (bool success, ) = address(router).call{value: bnbAmount}(
-            abi.encodeWithSignature("addLiquidityETH(address,uint256,uint256,uint256,address,uint256)", address(this), tokenAmount, 0, 0, owners[0], block.timestamp));
+            abi.encodeWithSignature("addLiquidityETH(address,uint256,uint256,uint256,address,uint256)", address(this), tokenAmount, 20, 20, owners[0], block.timestamp));
         require(success, "Add liquidity failed");
     }
 
