@@ -544,7 +544,7 @@ interface IRouter {
         }
     }
 
-    function initialize(address routerAddress) public initializer {
+    function initialize(address routerAddress) public initializer onlyMultiOwner {
         require(routerAddress != address(0), "Router address empty.");
         IRouter _router = IRouter(routerAddress);
         pair = IFactory(_router.factory()).createPair(address(this), _router.WETH());
