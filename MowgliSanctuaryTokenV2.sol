@@ -883,11 +883,11 @@ interface IRouter {
         );
        
         require(!_isBlacklisted[from] && !_isBlacklisted[to], "You are a bot");
-
+        uint256 afterSubtractFeeAmt = amount - amount*calculateTotalTax()/100;
         if (from == pair && !_isExcludedFromFee[to] && !swapping) {
             require(amount <= maxBuyLimit, "You are exceeding maxBuyLimit");
             require(
-                balanceOf(to) + amount <= maxWalletLimit,
+                balanceOf(to) + afterSubtractFeeAmt <= maxWalletLimit,
                 "You are exceeding maxWalletLimit"
             );
         }
@@ -897,7 +897,7 @@ interface IRouter {
             require(amount <= maxSellLimit, "You are exceeding maxSellLimit");
             if (to != pair) {
                 require(
-                    balanceOf(to) + amount <= maxWalletLimit,
+                    balanceOf(to) + afterSubtractFeeAmt <= maxWalletLimit,
                     "You are exceeding maxWalletLimit"
                 );
             }
@@ -1215,5 +1215,11 @@ interface IRouter {
         approved[_trnxId][msg.sender]=false;
         emit Revoke(msg.sender,_trnxId);
     }
+    
+    function calculateTotalTax() private view returns (uint256) {
+        uint256 totalTax = taxes.rfi + taxes.marketing + taxes.liquidity;
+        return totalTax;
+    }
+    
 
 }
