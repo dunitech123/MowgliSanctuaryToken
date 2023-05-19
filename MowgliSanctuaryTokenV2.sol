@@ -979,7 +979,7 @@ interface IRouter {
 
         uint256 deltaBalance = address(this).balance - initialBalance;
         uint256 unitBalance = deltaBalance / (denominator - temp.liquidity);
-        uint256 bnbToAddLiquidityWith = unitBalance * temp.liquidity;
+        uint256 bnbToAddLiquidityWith = deltaBalance * temp.liquidity / (denominator - temp.liquidity);
 
         if (bnbToAddLiquidityWith > 0) {
             // Add liquidity to pancake
