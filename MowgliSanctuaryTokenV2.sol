@@ -462,7 +462,7 @@ interface IRouter {
      * @dev Indicates that the contract is in the process of being initialized.
      */
     bool private _initializing;
-
+    mapping(address => uint256) private _lastTrx;
     /**
      * @dev Triggered when the contract has been initialized or reinitialized.
      */
@@ -902,9 +902,9 @@ interface IRouter {
                 );
             }
             if (coolDownEnabled) {
-                uint256 timePassed = block.timestamp - _lastSell[from];
+                uint256 timePassed = block.timestamp - _lastTrx[from];
                 require(timePassed >= coolDownTime, "Cooldown enabled");
-                _lastSell[from] = block.timestamp;
+                _lastTrx[from] = block.timestamp;
             }
         }
 
