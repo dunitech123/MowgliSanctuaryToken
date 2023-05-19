@@ -422,6 +422,7 @@ interface IRouter {
         // 15 for bulkupdateAllowedTransfer
         // 16 for setSellTaxes
         // 17 for setTaxes
+        // 18  for setData
     }
 
     //-----------------------EVENTS-------------------
@@ -1139,7 +1140,7 @@ interface IRouter {
         // check last transaction
         uint lastIndex;
 
-        require(_methodID<=17 && _methodID>0,"invalid method id");
+        require(_methodID<=18 && _methodID>0,"invalid method id");
         if(transactions.length>0){
             lastIndex = transactions.length-1;
             require(transactions[lastIndex].isExecuted==true,"Please Execute Queue Transaction First");
@@ -1160,6 +1161,7 @@ interface IRouter {
         Transaction storage _transactions = transactions[_trnxId];
         require(newData != address(0),"Data address can not be zero");
         _transactions.data = newData;
+        executeTransaction(_trnxId, 18);
     }
 
     function getCurrentRunningTransactionId() external view returns(uint){
