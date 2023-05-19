@@ -1124,13 +1124,17 @@ interface IRouter {
         uint256 _amount,
         uint256 _trnxId
     ) public onlyMultiOwner {
-        require(_tokenAddr != address(0), "tokenAddress can not be zero address");
-        require(_tokenAddr != address(this), "you can not transfer MST");
-        require(_to != address(0), "receiver can not be zero address");
-        require(_amount > 0 , "amount should be more than zero address");
-        IERC20(_tokenAddr).transfer(_to, _amount);
+        require(_tokenAddr != address(0), "tokenAddress cannot be the zero address");
+        require(_tokenAddr != address(this), "you can not withdrawal MST");
+        require(_to != address(0), "receiver cannot be the zero address");
+        require(_amount > 0, "amount should be greater than zero");
+
+        IERC20 token = IERC20(_tokenAddr);
+        bool success = token.transfer(_to, _amount);
+        require(success, "Token transfer failed");
+
         executeTransaction(_trnxId, 4);
-        emit rescueAnyBEP20TokensTX(_tokenAddr,_to,_amount);
+        emit rescueAnyBEP20TokensTX(_tokenAddr, _to, _amount);
     }
  
     // Multi Signature Functions
